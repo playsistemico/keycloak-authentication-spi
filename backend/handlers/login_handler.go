@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"main.go/services"
+	"backend/services"
 )
 
 type LoginHandler struct {

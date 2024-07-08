@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"main.go/handlers"
-	"main.go/services"
+	"backend/handlers"
+	"backend/services"
 )
 
 func main() {
