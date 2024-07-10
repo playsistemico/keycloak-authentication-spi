@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  auth-server:
+    image: quay.io/keycloak/keycloak:24.0.5
+    ports:
+      - "9090:8080"
+    command: start-dev
+    networks:
+      - pcp
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+  backennd:
+    build: ./backend
+    ports:
+      - "9091:8080"
+    networks:
+      - pcp
+    environment:
+      - KEYCLOAK_BASE_URL=pcp-auth-server:9090
+
+networks:
+  pcp:
+    driver: bridge
