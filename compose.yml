@@ -1,8 +1,10 @@
-version: '3'
+version: '3.2'
 
 services:
   auth-server:
-    image: quay.io/keycloak/keycloak:24.0.5
+    build:
+      context: ./spi
+      dockerfile: Dockerfile
     ports:
       - "9090:8080"
     command: start-dev
@@ -11,6 +13,9 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=h2
+    volumes:
+      - ./h2:/opt/keycloak/data/h2
   backennd:
     build: ./backend
     ports:
