@@ -31,13 +31,13 @@ func (ctrl *loginController) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := ctrl.srv.Create(loginData.Username, loginData.Password)
+	session, err := ctrl.srv.Create(loginData.Username, loginData.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"session": session})
 }
 
 func (ctrl *loginController) ValidateSession(c *gin.Context) {
