@@ -4,13 +4,10 @@ import (
 	"backend/internal/service"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
-
-	"backend/db"
 	"backend/internal/controller"
 	"backend/internal/defines"
 	"backend/internal/repository"
+	"github.com/gin-gonic/gin"
 )
 
 func New() *gin.Engine {
@@ -22,11 +19,8 @@ func New() *gin.Engine {
 }
 
 func mapRoutes(r *gin.Engine) {
-	database := db.InitDB()
-	sqlxDB := sqlx.NewDb(database, "sqlite3")
-
 	// Repository init
-	usersRepo := repository.NewUsersRepository(sqlxDB)
+	usersRepo := repository.NewUsersRepository()
 
 	// Services init
 	loginSvc := service.NewLoginService(usersRepo)

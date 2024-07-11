@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"backend/internal/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"backend/internal/defines"
 	services "backend/internal/service"
 )
 
@@ -24,7 +24,7 @@ func NewLoginController(srv services.LoginService) LoginController {
 }
 
 func (ctrl *loginController) Login(c *gin.Context) {
-	var loginData defines.LoginData
+	var loginData domain.LoginRequestBody
 
 	if err := c.ShouldBindJSON(&loginData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -37,7 +37,8 @@ func (ctrl *loginController) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"session": session})
+	resp := domain.LoginResponseBody{Session: session}
+	c.JSON(http.StatusOK, resp)
 }
 
 func (ctrl *loginController) ValidateSession(c *gin.Context) {
@@ -54,6 +55,6 @@ func (ctrl *loginController) ValidateSession(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user_name": resp.Name})
+	c.JSON(http.StatusOK, gin.H{"username": resp.Name})
 
 }

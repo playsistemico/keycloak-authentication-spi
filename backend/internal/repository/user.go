@@ -1,17 +1,8 @@
-// backend/internal/repository/repository.go
 package repository
 
 import (
-	"database/sql"
-	"errors"
-
-	"github.com/jmoiron/sqlx"
-
 	"backend/internal/domain"
-)
-
-const (
-	tableUsers = "users"
+	"errors"
 )
 
 type UsersRepository interface {
@@ -20,43 +11,25 @@ type UsersRepository interface {
 }
 
 type usersRepository struct {
-	db         *sqlx.DB
-	sqlBuilder *usersSQL
+	db map[string]domain.User
 }
 
-func NewUsersRepository(db *sqlx.DB) UsersRepository {
+func NewUsersRepository() UsersRepository {
 	return &usersRepository{
-		db:         db,
-		sqlBuilder: &usersSQL{},
+		db: make(map[string]domain.User),
 	}
 }
 
 func (r *usersRepository) Create(u *domain.User) (*domain.User, error) {
-	query, args, err := r.sqlBuilder.CreateSQL(u)
-	if err != nil {
-		return nil, err
-	}
-	_, err = r.db.Exec(query, args...)
-	if err != nil {
-		return nil, err
-	}
-
+	r.db[u.ID] = *u
 	return u, nil
 }
 
 func (r *usersRepository) GetByID(id string) (*domain.User, error) {
-	query, args, err := r.sqlBuilder.GetByIDSQL(id)
-	if err != nil {
-		return nil, err
-	}
+	user, exists := r.db[id]
 
-	var user domain.User
-	err = r.db.QueryRowx(query, args...).StructScan(&user)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, err
-		}
-		return nil, err
+	if !exists {
+		return nil, errors.New("user not found")
 	}
 
 	return &user, nil
