@@ -1,4 +1,3 @@
-// backend/db/setup.go
 package db
 
 import (
