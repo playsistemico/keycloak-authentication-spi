@@ -1,4 +1,4 @@
-package modo.keycloak.authentication.authenticator.directgrant;
+package modo.keycloak.authentication.authenticator.browser;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class ValidateSessionFactory implements AuthenticatorFactory {
     @Override
     public Requirement[] getRequirementChoices() {
         return new AuthenticationExecutionModel.Requirement[] {
-            AuthenticationExecutionModel.Requirement.REQUIRED,
+            AuthenticationExecutionModel.Requirement.ALTERNATIVE,
             AuthenticationExecutionModel.Requirement.DISABLED,
         };
     }

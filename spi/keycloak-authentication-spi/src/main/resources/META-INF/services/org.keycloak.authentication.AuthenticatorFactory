@@ -1,1 +1,1 @@
-modo.keycloak.authentication.authenticator.directgrant.ValidateSessionFactory
+modo.keycloak.authentication.authenticator.browser.ValidateSessionFactory

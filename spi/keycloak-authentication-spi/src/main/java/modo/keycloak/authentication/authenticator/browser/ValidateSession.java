@@ -1,4 +1,4 @@
-package modo.keycloak.authentication.authenticator.directgrant;
+package modo.keycloak.authentication.authenticator.browser;
 
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
@@ -23,26 +23,31 @@ public class ValidateSession implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-        MultivaluedMap<String, String> inputData = context.getHttpRequest().getDecodedFormParameters();
+        MultivaluedMap<String, String> inputData = context.getHttpRequest().getUri().getQueryParameters();
         String session = inputData.getFirst("session");
-        logger.info("session from param: "+session);
+        if (session == null) {
+            context.attempted();
+            return;
+        }
         String username = getUserFromSession(context, session);
-        if (username == "") {
-            logger.info("user empty");
-            context.getEvent().error(Errors.USER_NOT_FOUND);
-            context.success();
+        if (username == null) {
+            context.attempted();
             return;
         }
 
         UserModel user = KeycloakModelUtils.findUserByNameOrEmail(context.getSession(), context.getRealm(), username);
-        logger.info("userID: "+user.getId());
+        if (user == null){
+            context.getEvent().error(Errors.USER_NOT_FOUND);
+            context.attempted();
+            return;
+        }
+        
         context.setUser(user);
         context.success();
     }
 
     @Override
     public void action(AuthenticationFlowContext context) {
-        context.success();
     }
 
     @Override
@@ -61,15 +66,18 @@ public class ValidateSession implements Authenticator {
 
     private String getUserFromSession(AuthenticationFlowContext context, String session){
         SimpleHttp httpResp = SimpleHttp.doGet("http://mockserver:8080/session?session="+session, context.getSession());
-        JsonNode resp;
+        
         try {
+            JsonNode resp;
             resp = httpResp.asJson();
+            logger.info("API RESPONSE: "+resp.toString());
+            String username = resp.get("username").asText();
+            return username;
+
         } catch (Exception e) {
-            logger.info("exception: "+e.toString());
-            return "";
+            logger.info("API ERROR: "+e.toString());
+            return null;
         }
         
-        logger.info(resp.toString());
-        return resp.get("username").asText();
     }
 }

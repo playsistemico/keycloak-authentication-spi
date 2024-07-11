@@ -41,7 +41,7 @@ make build-spi
 
 ## Run all
 ```
-docker compose up -d
+make all
 ```
 
 
