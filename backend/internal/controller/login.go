@@ -31,7 +31,7 @@ func (ctrl *loginController) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := ctrl.srv.Login(loginData.Username, loginData.Password)
+	token, err := ctrl.srv.Create(loginData.Username, loginData.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
 		return
@@ -41,19 +41,19 @@ func (ctrl *loginController) Login(c *gin.Context) {
 }
 
 func (ctrl *loginController) ValidateSession(c *gin.Context) {
-	var authData defines.AuthData
 
-	if err := c.ShouldBindJSON(&authData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	session := c.Query("session")
+	if session == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Session parameter is required"})
 		return
 	}
 
-	resp, err := ctrl.srv.ValidateSession(authData.Token)
-	if !resp || err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+	resp, err := ctrl.srv.GetUser(session)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid session"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Everything is OK"})
+	c.JSON(http.StatusOK, gin.H{"user_name": resp.Name})
 
 }

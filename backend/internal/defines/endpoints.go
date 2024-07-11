@@ -4,5 +4,5 @@ const (
 	EndpointPing = "/ping"
 
 	EndpointLogin   = "/login"
-	EndpointApp2app = "app2app/auth"
+	EndpointApp2app = "/user"
 )
