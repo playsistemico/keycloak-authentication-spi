@@ -3,6 +3,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/jmoiron/sqlx"
 
@@ -52,7 +53,7 @@ func (r *usersRepository) GetByID(id string) (*domain.User, error) {
 	var user domain.User
 	err = r.db.QueryRowx(query, args...).StructScan(&user)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, err
 		}
 		return nil, err

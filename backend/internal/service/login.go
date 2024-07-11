@@ -1,4 +1,4 @@
-package services
+package service
 
 import (
 	"errors"
@@ -23,7 +23,7 @@ func NewLoginService(usersRepo repository.UsersRepository) LoginService {
 }
 
 func (s *loginService) Create(username, password string) (string, error) {
-	id := uuid.New().String()
+	id := uuid.NewString()
 	user := &domain.User{
 		ID:   id,
 		Name: username,
@@ -37,8 +37,8 @@ func (s *loginService) Create(username, password string) (string, error) {
 	return id, nil
 }
 
-func (s *loginService) GetUser(sessionToken string) (domain.User, error) {
-	user, err := s.usersRepo.GetByID(sessionToken)
+func (s *loginService) GetUser(session string) (domain.User, error) {
+	user, err := s.usersRepo.GetByID(session)
 	if err != nil {
 		return domain.User{}, err
 	}
