@@ -1,8 +1,7 @@
 package defines
 
 const (
-	EndpointPing = "/ping"
-
-	EndpointLogin   = "/login"
-	EndpointApp2app = "/user"
+	EndpointPing  = "/ping"
+	EndpointLogin = "/login"
+	EndpointUser  = "/user"
 )

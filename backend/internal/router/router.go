@@ -1,6 +1,7 @@
 package router
 
 import (
+	"backend/internal/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,6 @@ import (
 	"backend/internal/controller"
 	"backend/internal/defines"
 	"backend/internal/repository"
-	services "backend/internal/service"
 )
 
 func New() *gin.Engine {
@@ -22,7 +22,6 @@ func New() *gin.Engine {
 }
 
 func mapRoutes(r *gin.Engine) {
-
 	database := db.InitDB()
 	sqlxDB := sqlx.NewDb(database, "sqlite3")
 
@@ -30,7 +29,7 @@ func mapRoutes(r *gin.Engine) {
 	usersRepo := repository.NewUsersRepository(sqlxDB)
 
 	// Services init
-	loginSvc := services.NewLoginService(usersRepo)
+	loginSvc := service.NewLoginService(usersRepo)
 
 	// Controllers init
 	loginCtrl := controller.NewLoginController(loginSvc)
@@ -38,7 +37,7 @@ func mapRoutes(r *gin.Engine) {
 	// Endpoints
 	r.GET(defines.EndpointPing, healthCheck)
 	r.POST(defines.EndpointLogin, loginCtrl.Login)
-	r.GET(defines.EndpointApp2app, loginCtrl.ValidateSession)
+	r.GET(defines.EndpointUser, loginCtrl.ValidateSession)
 }
 
 func healthCheck(ctx *gin.Context) {
