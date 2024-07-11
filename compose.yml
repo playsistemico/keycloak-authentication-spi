@@ -21,15 +21,6 @@ services:
       - "9091:8080"
     networks:
       - pcp
-    environment:
-      - KEYCLOAK_BASE_URL=pcp-auth-server:9090
-  mockserver:
-    image: ghcr.io/smocker-dev/smocker
-    ports:
-      - "9092:8080"
-      - "9093:8081"
-    networks:
-      - pcp
 
 networks:
   pcp:

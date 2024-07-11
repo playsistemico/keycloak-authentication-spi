@@ -41,7 +41,7 @@ public class ValidateSession implements Authenticator {
             context.attempted();
             return;
         }
-        
+
         context.setUser(user);
         context.success();
     }
@@ -65,8 +65,8 @@ public class ValidateSession implements Authenticator {
     }
 
     private String getUserFromSession(AuthenticationFlowContext context, String session){
-        SimpleHttp httpResp = SimpleHttp.doGet("http://mockserver:8080/session?session="+session, context.getSession());
-        
+        SimpleHttp httpResp = SimpleHttp.doGet("http://backend:8080/user?session="+session, context.getSession());
+
         try {
             JsonNode resp;
             resp = httpResp.asJson();
@@ -78,6 +78,5 @@ public class ValidateSession implements Authenticator {
             logger.info("API ERROR: "+e.toString());
             return null;
         }
-        
     }
 }
