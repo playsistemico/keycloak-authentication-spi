@@ -38,7 +38,7 @@ public class ValidateSessionFactory implements AuthenticatorFactory {
 
     @Override
     public String getDisplayType() {
-        return "Validate session authenticator";
+        return "Validate Session Authenticator";
     }
 
     @Override
@@ -73,5 +73,5 @@ public class ValidateSessionFactory implements AuthenticatorFactory {
     public String getHelpText() {
         return "Authenticates a user with a session code.";
     }
-    
+
 }

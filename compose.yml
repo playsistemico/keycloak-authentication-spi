@@ -7,7 +7,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9090:8080"
-    command: start-dev
     networks:
       - pcp
     environment:
@@ -16,7 +15,7 @@ services:
       - DB_VENDOR=h2
     volumes:
       - ./h2:/opt/keycloak/data/h2
-  backennd:
+  backend:
     build: ./backend
     ports:
       - "9091:8080"
@@ -24,6 +23,13 @@ services:
       - pcp
     environment:
       - KEYCLOAK_BASE_URL=pcp-auth-server:9090
+  mockserver:
+    image: ghcr.io/smocker-dev/smocker
+    ports:
+      - "9092:8080"
+      - "9093:8081"
+    networks:
+      - pcp
 
 networks:
   pcp:
