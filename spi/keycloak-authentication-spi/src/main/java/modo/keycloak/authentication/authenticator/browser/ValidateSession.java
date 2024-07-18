@@ -23,6 +23,7 @@ public class ValidateSession implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
+        context.clearUser();
         MultivaluedMap<String, String> inputData = context.getHttpRequest().getUri().getQueryParameters();
         String session = inputData.getFirst("session");
         if (session == null) {
