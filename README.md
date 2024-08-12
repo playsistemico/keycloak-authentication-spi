@@ -1,15 +1,11 @@
 # keycloak-authorization-spi
 Simple authorization SPI for Keycloak
 
-- [Install dependencies]
-
 ### Useful links
 - [Create Keycloak plugin](https://dev.to/yakovlev_alexey/how-to-create-a-keycloak-plugin-3acj)
 - [Keycloak auth SPI docs](https://wjw465150.gitbooks.io/keycloak-documentation/content/server_development/topics/auth-spi.html)
 - [Keycloak authenticators repo](https://github.com/keycloak/keycloak/tree/main/services/src/main/java/org/keycloak/authentication/authenticators)
 - [Keycloak SPI example](https://github.com/zene22/keycloak-spi-example)
-
-
 
 # Install dependencies
 ## General
